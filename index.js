@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from 'cros'
+import cors from 'cors'
 import { snacksRouter } from "./routes/snacks.js";
 import { indianFoodsRouter } from "./routes/indianFoods.js";
 import { coolDrinksRouter } from "./routes/coolDrinks.js";
