@@ -29,24 +29,18 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
     try {        
         const user = await getUser(req.body.email);
-        
-        // Check if the user exists first
-        if (!user) {
+                if (!user) {
             return res.status(404).json({ errMsg: 'User Name Or Password Wrong' });
         }
-        
-        // Validate password
         const isValidPassword = await bcrypt.compare(req.body.password, user.password);
         if (!isValidPassword) {
             return res.status(404).json({ errMsg: 'User Name Or Password Wrong' });
         }
         
-        // Generate token after confirming the user exists and password is valid
         const token = generateToken(user._id);
         
         res.status(200).json({ message: 'Successfully Logged in..', token });
     } catch (error) {
-        console.error(error); // Log the error for debugging
         res.status(500).json({ errMsg: 'Internal Server Error' });        
     }
 });
