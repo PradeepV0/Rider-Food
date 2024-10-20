@@ -18,7 +18,8 @@ router.post('/signup',async(req,res)=>{
             console.log(hashedPasword);  
             const hasedUser = {...req.body,password:hashedPasword}
             const result = await addUser(hasedUser)
-            res.status(200).json({message:"SuccessFully Signed Up"})
+            res.status(200).json({message:"SuccessFully Signed Up",data:result})
+            return
         }
             res.status(400).json({errMsg:"Given Email Is Already Exist"})
         } catch (error) {

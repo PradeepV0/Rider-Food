@@ -24,7 +24,7 @@ export function getAllUser(){
     return client 
     .db('ecomm')
     .collection("users")
-    .find()
+    .find({})
     .toArray()
 }
 
