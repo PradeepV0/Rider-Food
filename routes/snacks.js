@@ -26,6 +26,8 @@ router.get("/get-all", async (req, res) => {
   try {
     const ecomm = await getAll("snacks");
     res.status(200).json(ecomm);
+    console.log('hii');
+    
   } catch (err) {
     console.log(err);
   }

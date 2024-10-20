@@ -7,6 +7,7 @@ import { coolDrinksRouter } from "./routes/coolDrinks.js";
 import { chineseFoodsRouter } from "./routes/chineseFoods.js";
 import { iceCreamsRouter } from "./routes/iceCreams.js";
 import { soupRouter } from "./routes/soup.js";
+import { usersRouter } from "./routes/users.js";
 dotenv.config();
 const PORT = process.env.PORT;
 
@@ -20,12 +21,15 @@ app.use("/coolDrinks", coolDrinksRouter);
 app.use("/chineseFoods", chineseFoodsRouter);
 app.use("/iceCreams", iceCreamsRouter);
 app.use("/soup", soupRouter);
+app.use("/users", usersRouter);
 
 
 
 app.get("/", (req, res) => {
-  req.send("Hello i am started");
+  res.send("Hello i am started");
 });
+
+
 app.listen(PORT, () => {
   console.log(`server started in localhost:${PORT}`);
 });
