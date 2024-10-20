@@ -6,28 +6,25 @@ import { addUser, generateToken, getAllUser, getUser } from "../controlers/users
 const router = express.Router();
 
 
-router.post('/signup',async(req,res)=>{
-    console.log('hii');
-     
+router.post('/signup', async (req, res) => {
+    console.log('Request received:', req.body);
+    
     try {
-        const user = await getUser(req.body.email)
-        const salt = await bcrypt.genSalt(10)
-        console.log(salt,'salt',user);   
-        if(!user){
-            const hashedPasword = await bcrypt.hash(req.body.password,salt)
-            console.log(hashedPasword);  
-            const hasedUser = {...req.body,password:hashedPasword}
-            const result = await addUser(hasedUser)
-            res.status(200).json({message:"SuccessFully Signed Up",data:result})
-            return
+        const user = await getUser(req.body.email);
+        if (user) {
+            return res.status(400).json({ errMsg: "Given Email Already Exists" });
         }
-            res.status(400).json({errMsg:"Given Email Is Already Exist"})
-        } catch (error) {
-        console.log('Error Occured',error);
-        res.status(50).json({data:'Internal Server Error'})
-
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        const hashedUser = { ...req.body, password: hashedPassword };
+        const result = await addUser(hashedUser);
+        return res.status(201).json({ message: "Successfully Signed Up", data: result });
+    } catch (error) {
+        console.log('Error Occurred:', error);
+        return res.status(500).json({ data: 'Internal Server Error' });
     }
-})
+});
+
 
 router.post('/signin',async(req,res)=>{
     try {        
