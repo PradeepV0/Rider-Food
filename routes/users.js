@@ -26,26 +26,30 @@ router.post('/signup', async (req, res) => {
 });
 
 
-router.post('/signin',async(req,res)=>{
+router.post('/signin', async (req, res) => {
     try {        
-        const user = await getUser(req.body.email)    
-        console.log(user,'user');
-        const token =  generateToken(user._id)
-    console.log(token);    
-    if(user === null){
-        res.status(404).json({errMsg :'User Name Or Password Wrong'})
-        return
-    }    
-    const isaValidPassword = await bcrypt.compare(req.body.password, user.password);      
-        if(!isaValidPassword){
-            res.status(404).json({errMsg :'User Name Or Password Wrong'})
-        return
+        const user = await getUser(req.body.email);
+        
+        // Check if the user exists first
+        if (!user) {
+            return res.status(404).json({ errMsg: 'User Name Or Password Wrong' });
         }
-        res.status(200).json({message : 'SucessFully Logged in..',token})
+        
+        // Validate password
+        const isValidPassword = await bcrypt.compare(req.body.password, user.password);
+        if (!isValidPassword) {
+            return res.status(404).json({ errMsg: 'User Name Or Password Wrong' });
+        }
+        
+        // Generate token after confirming the user exists and password is valid
+        const token = generateToken(user._id);
+        
+        res.status(200).json({ message: 'Successfully Logged in..', token });
     } catch (error) {
-        res.status(400).json({errMsg : "Internal Server Error"})        
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ errMsg: 'Internal Server Error' });        
     }
-})
+});
 
 
 router.get("/get-all", async (req, res) => {
